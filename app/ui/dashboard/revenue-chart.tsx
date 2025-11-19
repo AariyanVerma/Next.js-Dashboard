@@ -23,7 +23,7 @@ export default function RevenueChart({
             <div
               className="w-6 rounded-md bg-blue-200"
               style={{
-                height: `${(item.revenue / maxRevenue) * 100}%`, // scaling fix
+                height: `${(item.revenue / maxRevenue) * 100}%`, 
               }}
             />
             <span className="mt-2 text-xs text-gray-500">

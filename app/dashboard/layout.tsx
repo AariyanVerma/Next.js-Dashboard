@@ -1,4 +1,3 @@
-// app/dashboard/layout.tsx
 import type { ReactNode } from "react";
 import SideNav from "@/app/ui/dashboard/sidenav";
 
@@ -9,10 +8,8 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Left sidebar */}
       <SideNav />
 
-      {/* Main area */}
       <div className="flex-1 overflow-y-auto">
         {children}
       </div>
