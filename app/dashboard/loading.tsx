@@ -1,12 +1,8 @@
-// app/dashboard/loading.tsx
-
 export default function DashboardLoading() {
   return (
     <main className="px-8 py-8 space-y-8">
-      {/* Page title skeleton */}
       <div className="h-7 w-40 rounded-md bg-gray-200 animate-pulse" />
 
-      {/* Top summary cards skeleton */}
       <section className="mt-2 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div
@@ -18,10 +14,7 @@ export default function DashboardLoading() {
           </div>
         ))}
       </section>
-
-      {/* Revenue chart + Latest invoices skeleton */}
       <section className="mt-4 grid gap-6 lg:grid-cols-3">
-        {/* Revenue card */}
         <div className="lg:col-span-2 rounded-2xl border border-gray-200 bg-white shadow-sm p-6">
           <div className="flex items-center justify-between">
             <div className="h-4 w-28 rounded-md bg-gray-200 animate-pulse" />
@@ -30,8 +23,6 @@ export default function DashboardLoading() {
 
           <div className="mt-6 h-40 rounded-xl bg-gray-100 animate-pulse" />
         </div>
-
-        {/* Latest invoices card */}
         <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-6 space-y-4">
           <div className="h-4 w-32 rounded-md bg-gray-200 animate-pulse" />
 

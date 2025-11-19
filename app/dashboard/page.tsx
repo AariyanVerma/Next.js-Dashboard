@@ -19,7 +19,6 @@ export default async function DashboardPage() {
     <main className="px-8 py-8">
       <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
 
-      {/* Top cards */}
       <section className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card title="Collected" value={cardData.collectedTotal} type="collected" />
         <Card title="Pending" value={cardData.pendingTotal} type="pending" />
@@ -35,7 +34,6 @@ export default async function DashboardPage() {
         />
       </section>
 
-      {/* Revenue + Latest invoices */}
       <section className="mt-10 grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <RevenueChart revenue={revenue} />
