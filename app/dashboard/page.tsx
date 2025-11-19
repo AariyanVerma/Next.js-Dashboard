@@ -6,6 +6,7 @@ import {
 import RevenueChart from "@/app/ui/dashboard/revenue-chart";
 import LatestInvoices from "@/app/ui/dashboard/latest-invoices";
 import { Card } from "@/app/ui/dashboard/cards";
+export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
   const [revenue, latestInvoices, cardData] = await Promise.all([

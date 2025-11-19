@@ -1,4 +1,5 @@
 import { sql } from "@vercel/postgres";
+import { unstable_noStore as noStore } from 'next/cache';
 
 // ---------- Types ----------
 // app/lib/data.ts
@@ -22,6 +23,7 @@ export type LatestInvoice = {
 
 // 1) Revenue for chart
 export async function fetchRevenue(): Promise<Revenue[]> {
+     noStore();
   const result = await sql<Revenue>`
     SELECT id, month, revenue
     FROM revenue
