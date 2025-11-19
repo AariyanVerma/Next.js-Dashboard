@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import NavLinks from '@/app/ui/dashboard/nav-links';
 
 export default function SideNav() {
   return (
@@ -7,25 +8,8 @@ export default function SideNav() {
         <Link href="/dashboard">Next.js Dashboard</Link>
       </div>
 
-      <nav className="flex flex-col gap-2 text-sm">
-        <Link
-          href="/dashboard"
-          className="rounded-md px-3 py-2 hover:bg-gray-100"
-        >
-          Overview
-        </Link>
-        <Link
-          href="/dashboard/customers"
-          className="rounded-md px-3 py-2 hover:bg-gray-100"
-        >
-          Customers
-        </Link>
-        <Link
-          href="/dashboard/invoices"
-          className="rounded-md px-3 py-2 hover:bg-gray-100"
-        >
-          Invoices
-        </Link>
+      <nav className="flex flex-col gap-2">
+        <NavLinks />
       </nav>
 
       <div className="mt-auto text-xs text-gray-400">
