@@ -1,5 +1,3 @@
-// app/ui/dashboard/revenue-chart.tsx
-
 export default function RevenueChart({
   revenue,
 }: {
@@ -13,9 +11,10 @@ export default function RevenueChart({
     <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-medium text-gray-700">Recent Revenue</h2>
+        <span className="text-xs text-gray-400">Last 12 months</span>
       </div>
 
-      <div className="mt-6 flex h-56 items-end gap-4">
+      <div className="mt-6 flex h-80 items-end gap-4">
         {revenue.map((item) => (
           <div
             key={item.id}
@@ -24,7 +23,7 @@ export default function RevenueChart({
             <div
               className="w-6 rounded-md bg-blue-200"
               style={{
-                height: `${(item.revenue / maxRevenue) * 100}%`, // 👈 scale to full height
+                height: `${(item.revenue / maxRevenue) * 100}%`, // scaling fix
               }}
             />
             <span className="mt-2 text-xs text-gray-500">
