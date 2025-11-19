@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className="antialiased"
+        className="bg-gray-100 text-gray-900 antialiased"
         style={{ isolation: "isolate" }}
         suppressHydrationWarning
       >
