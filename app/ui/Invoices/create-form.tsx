@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { createInvoice } from '@/app/lib/action';
-import Link from 'next/link';
+import { useActionState } from "react";
+import Link from "next/link";
+import { createInvoice, State } from "@/app/lib/action";
 
 type Customer = {
   id: string;
@@ -9,101 +10,124 @@ type Customer = {
   email?: string;
 };
 
-export default function CreateInvoiceForm({
-  customers,
-}: {
+type CreateInvoiceFormProps = {
   customers: Customer[];
-}) {
+};
+
+const initialState: State = {
+  errors: {},
+  message: null,
+};
+
+export default function CreateInvoiceForm({ customers }: CreateInvoiceFormProps) {
+const [state, formAction] = useActionState<State, FormData>(
+  createInvoice,
+  initialState
+);
+
   return (
     <form
-      action={createInvoice}
-      className="mt-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200 space-y-6"
-    >
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor="customer"
-            className="text-sm font-medium text-gray-700"
-          >
-            Customer
-          </label>
-          <select
-            id="customer"
-            name="customerId"
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            defaultValue=""
-            required
-          >
-            <option value="" disabled>
-              Select a customer
-            </option>
-            {customers.map((customer) => (
-              <option key={customer.id} value={customer.id}>
-                {customer.name}
-              </option>
-            ))}
-          </select>
-        </div>
+  action={formAction}
+  className="mt-6 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200 space-y-6"
+>
 
-        <div className="flex flex-col gap-1">
-          <label
-            htmlFor="amount"
-            className="text-sm font-medium text-gray-700"
-          >
-            Amount (USD)
-          </label>
-          <input
-            id="amount"
-            name="amount"
-            type="number"
-            min="0"
-            step="0.01"
-            placeholder="0.00"
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-2">
-        <span className="text-sm font-medium text-gray-700">Status</span>
-        <div className="flex gap-4 text-sm">
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="radio"
-              name="status"
-              value="pending"
-              defaultChecked
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span>Pending</span>
-          </label>
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="radio"
-              name="status"
-              value="paid"
-              className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-            />
-            <span>Paid</span>
-          </label>
-        </div>
-      </div>
-
-      <div className="flex justify-end gap-3">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-gray-900">Create Invoice</h1>
         <Link
           href="/invoices"
-          className="inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="rounded-md border border-gray-300 px-3 py-2 text-sm text-black hover:bg-gray-100"
         >
           Cancel
         </Link>
-        <button
-          type="submit"
-          className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-        >
-          Save invoice
-        </button>
       </div>
+
+      <div className="flex flex-col gap-1">
+        <label htmlFor="customer" className="text-sm font-medium text-black">
+          Customer
+        </label>
+
+        <select
+          id="customer"
+          name="customerId"
+          defaultValue=""
+          required
+          aria-describedby="customer-error"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          <option value="" disabled>
+            Select a customer
+          </option>
+
+          {customers.map((customer) => (
+            <option value={customer.id} key={customer.id}>
+              {customer.name}
+            </option>
+          ))}
+        </select>
+        {state.errors?.customerId && (
+          <p id="customer-error" className="text-sm text-red-600">
+            {state.errors.customerId.join(", ")}
+          </p>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="amount" className="text-sm font-medium text-black">
+          Amount
+        </label>
+
+        <input
+          id="amount"
+          name="amount"
+          type="number"
+          min="1"
+          step="0.01"
+          placeholder="Enter amount"
+          aria-describedby="amount-error"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+
+        {state.errors?.amount && (
+          <p id="amount-error" className="text-sm text-red-600">
+            {state.errors.amount.join(", ")}
+          </p>
+        )}
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="status" className="text-sm font-medium text-black">
+          Status
+        </label>
+
+        <select
+          id="status"
+          name="status"
+          aria-describedby="status-error"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-black focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          defaultValue=""
+        >
+          <option value="" disabled>
+            Select status
+          </option>
+          <option value="pending">Pending</option>
+          <option value="paid">Paid</option>
+        </select>
+
+        {state.errors?.status && (
+          <p id="status-error" className="text-sm text-red-600">
+            {state.errors.status.join(", ")}
+          </p>
+        )}
+      </div>
+
+      {state.message && (
+        <p className="text-sm text-red-600">{state.message}</p>
+      )}
+
+      <button
+        type="submit"
+        className="w-full rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
+      >
+        Create Invoice
+      </button>
     </form>
   );
 }
