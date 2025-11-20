@@ -118,3 +118,18 @@ export async function fetchInvoicesPages(query: string): Promise<number> {
   const total = result.rows[0]?.count ?? 0;
   return Math.max(1, Math.ceil(total / INVOICES_PER_PAGE));
 }
+
+export type Customer = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+export async function fetchCustomers(): Promise<Customer[]> {
+  const result = await sql<Customer>`
+    SELECT id, name, email
+    FROM customers
+    ORDER BY name ASC
+  `;
+  return result.rows;
+}
