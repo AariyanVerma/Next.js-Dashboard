@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { createInvoice, type State } from "@/app/lib/action";
+import { updateInvoice, type State } from "@/app/lib/action";
 import Link from "next/link";
 
 type Customer = {
@@ -10,17 +10,28 @@ type Customer = {
   email: string;
 };
 
+type Invoice = {
+  id: string;
+  customer_id: string;
+  amount: number; 
+  status: "pending" | "paid";
+};
+
 const initialState: State = {};
 
 type Props = {
+  invoice: Invoice;
   customers: Customer[];
 };
 
-export default function CreateInvoiceForm({ customers }: Props) {
+export default function EditInvoiceForm({ invoice, customers }: Props) {
   const [state, formAction, isPending] = useActionState(
-    createInvoice,
+    (prevState: State, formData: FormData) =>
+      updateInvoice(invoice.id, prevState, formData),
     initialState,
   );
+
+  const amountInDollars = invoice.amount / 100;
 
   return (
     <form
@@ -29,7 +40,7 @@ export default function CreateInvoiceForm({ customers }: Props) {
     >
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900">
-          New Invoice
+          Edit Invoice
         </h2>
         <Link
           href="/invoices"
@@ -50,17 +61,13 @@ export default function CreateInvoiceForm({ customers }: Props) {
           <select
             id="customer"
             name="customerId"
+            defaultValue={invoice.customer_id}
             className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
-            defaultValue=""
-            required
             aria-invalid={state.errors?.customerId ? true : undefined}
             aria-describedby={
               state.errors?.customerId ? "customer-error" : undefined
             }
           >
-            <option value="" disabled>
-              Select a customer
-            </option>
             {customers.map((customer) => (
               <option key={customer.id} value={customer.id}>
                 {customer.name}
@@ -90,6 +97,7 @@ export default function CreateInvoiceForm({ customers }: Props) {
             type="number"
             step="0.01"
             min="0"
+            defaultValue={amountInDollars}
             className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             aria-invalid={state.errors?.amount ? true : undefined}
             aria-describedby={
@@ -115,11 +123,11 @@ export default function CreateInvoiceForm({ customers }: Props) {
               name="status"
               value="pending"
               className="h-4 w-4"
+              defaultChecked={invoice.status === "pending"}
               aria-invalid={state.errors?.status ? true : undefined}
               aria-describedby={
                 state.errors?.status ? "status-error" : undefined
               }
-              defaultChecked
             />
             <span>Pending</span>
           </label>
@@ -130,6 +138,7 @@ export default function CreateInvoiceForm({ customers }: Props) {
               name="status"
               value="paid"
               className="h-4 w-4"
+              defaultChecked={invoice.status === "paid"}
             />
             <span>Paid</span>
           </label>
@@ -159,7 +168,7 @@ export default function CreateInvoiceForm({ customers }: Props) {
           disabled={isPending}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
         >
-          {isPending ? "Creating..." : "Create invoice"}
+          {isPending ? "Saving..." : "Save changes"}
         </button>
       </div>
     </form>
