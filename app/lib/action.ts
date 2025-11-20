@@ -5,24 +5,20 @@ import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-
 const FormSchema = z.object({
   id: z.string(),
-
   customerId: z
     .string()
-    .min(1, { message: "Please select a customer." }),
-
+    .min(1, "Please select a customer."), 
   amount: z.coerce
     .number()
     .gt(0, { message: "Amount must be greater than 0." }),
-
-  status: z.enum(["pending", "paid"]),
-
-  date: z.string(),
+  status: z.enum(["pending", "paid"]), 
+  date: z.string(), 
 });
 
-const CreateInvoice = FormSchema.omit({ id: true, date: true });
+const CreateInvoice = FormSchema.omit({ id: true });
+
 const UpdateInvoice = FormSchema.omit({ date: true });
 
 export type State = {
@@ -30,6 +26,7 @@ export type State = {
     customerId?: string[];
     amount?: string[];
     status?: string[];
+    date?: string[];
   };
   message?: string | null;
 };
@@ -43,32 +40,31 @@ export async function createInvoice(
     customerId: formData.get("customerId"),
     amount: Number(formData.get("amount")),
     status: formData.get("status"),
+    date: new Date().toISOString().split("T")[0], 
   };
 
   const parsed = CreateInvoice.safeParse(raw);
 
   if (!parsed.success) {
-    const flat = parsed.error.flatten();
+    const flat = parsed.error.flatten().fieldErrors;
     return {
       errors: {
-        customerId: flat.fieldErrors.customerId,
-        amount: flat.fieldErrors.amount,
-        status: flat.fieldErrors.status,
+        customerId: flat.customerId,
+        amount: flat.amount,
+        status: flat.status,
+        date: flat.date,
       },
       message: "Please correct the errors below.",
     };
   }
 
-  const { customerId, amount, status } = parsed.data;
-
-  const id = crypto.randomUUID(); 
-  const date = new Date().toISOString().split("T")[0];
+  const { customerId, amount, status, date } = parsed.data;
   const amountInCents = Math.round(amount * 100);
 
   try {
     await sql`
-      INSERT INTO invoices (id, customer_id, amount, status, date)
-      VALUES (${id}, ${customerId}, ${amountInCents}, ${status}, ${date})
+      INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
   } catch (error) {
     console.error("DB error while creating invoice:", error);
@@ -95,29 +91,26 @@ export async function updateInvoice(
   const parsed = UpdateInvoice.safeParse(raw);
 
   if (!parsed.success) {
-    const flat = parsed.error.flatten();
+    const flat = parsed.error.flatten().fieldErrors;
     return {
       errors: {
-        customerId: flat.fieldErrors.customerId,
-        amount: flat.fieldErrors.amount,
-        status: flat.fieldErrors.status,
+        customerId: flat.customerId,
+        amount: flat.amount,
+        status: flat.status,
       },
       message: "Please correct the errors below.",
     };
   }
 
   const { customerId, amount, status } = parsed.data;
-
   const amountInCents = Math.round(amount * 100);
-  const date = new Date().toISOString().split("T")[0];
 
   try {
     await sql`
       UPDATE invoices
       SET customer_id = ${customerId},
           amount = ${amountInCents},
-          status = ${status},
-          date = ${date}
+          status = ${status}
       WHERE id = ${id}
     `;
   } catch (error) {
