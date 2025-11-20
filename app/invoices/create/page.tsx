@@ -20,7 +20,7 @@ export default async function CreateInvoicePage() {
             },
           ]}
         />
-        <h1 className="text-2xl font-semibold text-gray-900">
+        <h1 className="text-2xl font-semibold text-black-900">
           Create Invoice
         </h1>
       </div>
