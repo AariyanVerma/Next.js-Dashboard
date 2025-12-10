@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+This project follows the Next.js Learn tutorial: https://nextjs.org/learn/dashboard-app
+
 ## Getting Started
 
 First, run the development server:
