@@ -16,9 +16,7 @@ const FormSchema = z.object({
   status: z.enum(["pending", "paid"]), 
   date: z.string(), 
 });
-
 const CreateInvoice = FormSchema.omit({ id: true });
-
 const UpdateInvoice = FormSchema.omit({ date: true });
 
 export type State = {
