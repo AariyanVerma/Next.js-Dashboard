@@ -8,7 +8,7 @@ export default async function CreateInvoicePage() {
   const customers = await fetchCustomers();
 
   return (
-    <main className="px-8 py-8">
+    <>
       <div className="flex flex-col gap-2">
         <Breadcrumbs
           breadcrumbs={[
@@ -26,6 +26,6 @@ export default async function CreateInvoicePage() {
       </div>
 
       <CreateInvoiceForm customers={customers} />
-    </main>
+    </>
   );
 }

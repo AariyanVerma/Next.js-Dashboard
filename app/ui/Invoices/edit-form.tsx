@@ -31,7 +31,7 @@ export default function EditInvoiceForm({ invoice, customers }: Props) {
     initialState,
   );
 
-  const amountInDollars = invoice.amount / 100;
+  const amountInDollars = invoice.amount;
 
   return (
     <form

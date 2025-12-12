@@ -3,7 +3,6 @@ import { sql } from "@vercel/postgres";
 
 export async function GET() {
   try {
-    // Create tables if not exist
     await sql`
       CREATE TABLE IF NOT EXISTS customers (
         id SERIAL PRIMARY KEY,
@@ -30,7 +29,6 @@ export async function GET() {
       );
     `;
 
-    // Insert sample customers
     await sql`
       INSERT INTO customers (name, email) VALUES
       ('Alice Johnson', 'alice@example.com'),
@@ -39,7 +37,6 @@ export async function GET() {
     ON CONFLICT DO NOTHING;
     `;
 
-    // Insert sample invoices
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
       VALUES
@@ -49,7 +46,6 @@ export async function GET() {
     ON CONFLICT DO NOTHING;
     `;
 
-    // Insert sample revenue
     await sql`
       INSERT INTO revenue (month, revenue)
       VALUES

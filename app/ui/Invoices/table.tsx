@@ -6,7 +6,7 @@ function formatCurrency(amount: number) {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 2,
-  }).format(amount / 100); 
+  }).format(amount); 
 }
 
 function formatDate(dateString: string) {

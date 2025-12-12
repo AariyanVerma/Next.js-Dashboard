@@ -57,12 +57,12 @@ export async function createInvoice(
   }
 
   const { customerId, amount, status, date } = parsed.data;
-  const amountInCents = Math.round(amount * 100);
+  const amountInUSD = Math.round(amount);
 
   try {
     await sql`
       INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+      VALUES (${customerId}, ${amountInUSD}, ${status}, ${date})
     `;
   } catch (error) {
     console.error("DB error while creating invoice:", error);
@@ -101,13 +101,13 @@ export async function updateInvoice(
   }
 
   const { customerId, amount, status } = parsed.data;
-  const amountInCents = Math.round(amount * 100);
+  const amountInUSD = Math.round(amount);
 
   try {
     await sql`
       UPDATE invoices
       SET customer_id = ${customerId},
-          amount = ${amountInCents},
+          amount = ${amountInUSD},
           status = ${status}
       WHERE id = ${id}
     `;

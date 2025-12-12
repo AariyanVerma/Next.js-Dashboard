@@ -1,4 +1,3 @@
-// app/lib/data.ts
 import { sql } from '@vercel/postgres';
 
 export type RevenuePoint = {
@@ -32,9 +31,6 @@ export async function fetchLatestInvoices(): Promise<LatestInvoice[]> {
   `;
   return result.rows;
 }
-
-// Example card data
-// app/lib/data.ts (or wherever your file is)
 
 export async function fetchCardData() {
   const paidResult = await sql<{ total: number | null }>`
